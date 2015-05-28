@@ -1,9 +1,9 @@
 #include "dict.h"
 
 struct _node {
-  dict_index_t father;		 // prefix string
+  dict_index_t father;		       // prefix string
   dict_index_t previous_brother; // string same prefix, before
-  dict_index_t next_brother;     // string same prefix after
+  dict_index_t next_brother;     // string same prefix, after
   dict_index_t suffix;           // suffix strings
   dict_char_t  last;             // string last char
 };
@@ -25,3 +25,4 @@ dict_error_t dict_index_internal_content (dict_t d,
                                           dict_index_t *suffix,
                                           dict_index_t *previous,
                                           dict_index_t *next);
+

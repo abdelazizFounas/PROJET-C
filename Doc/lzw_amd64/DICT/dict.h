@@ -1,21 +1,20 @@
 
 typedef short int dict_index_t;  	// le type index
-typedef long dict_char_t;          // le type valeur/caractere
+typedef long dict_char_t;         // le type valeur/caractere
 typedef struct _dict *dict_t;
 
 // Return codes
-typedef enum {DICT_INFOOK=0,    // uniquement pour info et node_content
-
+typedef enum {
+        DICT_INFOOK=0,    // uniquement pour info et node_content
 	      DICT_NODICT=1,    // dictionnaire invalide
 	      DICT_INVALID=2,   // index ou prefixe invalide
 	      DICT_NOTFOUND=3,  // noeud cherche absent
-              DICT_FOUND=4, 	// noeud (deja) present
-	      DICT_ADDED=5, 	// noeud ajoute
-              DICT_FULL=6,      // erreur en insertion : plus de place
-
-              DICT_FUNCERROR=7, // uniquement pour apply
-              DICT_MALLOCERROR=8  // pour getstring
-             } dict_error_t;
+        DICT_FOUND=4, 	  // noeud (deja) present
+	      DICT_ADDED=5, 	  // noeud ajoute
+        DICT_FULL=6,      // erreur en insertion : plus de place
+        DICT_FUNCERROR=7, // uniquement pour apply
+        DICT_MALLOCERROR=8  // pour getstring
+} dict_error_t;
 
 // constantes dict_index_t 
 #define DICT_ROOT_INDEX	-1		// index de la racine
