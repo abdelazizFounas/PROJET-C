@@ -112,9 +112,9 @@ unsigned int find_code (char* string){
 
 /* fonction d'insertion en queue d'un code dans la liste*/
 void insert(char* prefixe, char suffixe){
-	nb_elem++;
 	ptr_chaine_f->next = create_elem(nb_elem, cat_str_char(prefixe,suffixe));
 	ptr_chaine_f = ptr_chaine_f->next;
+	nb_elem++;
 }
 
 /* fonction de concatenation d'une chaine et d'un caractere */
@@ -138,7 +138,28 @@ void toStr(){
 	ptr_tmp = ptr_chaine_d;
 	
 	while(ptr_tmp != NULL){
-		printf("(-%d-%lu-%s-) ", ptr_tmp->code, strlen(ptr_tmp->mot), ptr_tmp->mot);
+		printf("(-%d-%s-) ", ptr_tmp->code, ptr_tmp->mot);
 		ptr_tmp = ptr_tmp->next;
 	}
+}
+
+char* search_by_code(int code){
+	dict_elem* ptr_tmp;
+	/* initialisation du ptr de parcours */
+	ptr_tmp = ptr_chaine_d;
+	
+	/* tant qu'on n'est pas en fin de liste et qu'on ne trouve pas le bon prefixe, on avance 
+	 * note : le strcmp renvoie 0 si les chaines sont égales, nb>0 si s1 est superieur a s2 dans ordre lexicographique
+	 * sinon elle renvoie un nb negatif */
+	int res = code-(ptr_tmp->code);
+	while((ptr_tmp != NULL) && (res !=0)){
+		res = code-(ptr_tmp->code);
+		if(res != 0){
+			ptr_tmp = ptr_tmp->next;
+		}
+	}
+	if(ptr_tmp != NULL){
+		return ptr_tmp->mot;
+	}
+	return NULL;
 }

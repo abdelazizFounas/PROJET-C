@@ -1,5 +1,5 @@
 CC = gcc
-SRCS = main.c structure.c compresseur.c
+SRCS = main.c structure.c compresseur.c decompresseur.c
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -I ../includes
 EXEC = main

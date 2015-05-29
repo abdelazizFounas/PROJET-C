@@ -137,7 +137,12 @@ char compression_fichier(FILE* fichier){
 		fclose(fichier);
 		fclose(fichier_dest);
 
-		//toStr();
+		destruction();
+    	nb_elem_max = 512;
+    	nb_elem_courant = 258;
+    	nb_bits_code = 9; 
+
+		toStr();
 		// on retourne 1 pour signifier la reussite de l operation
 		return 1;
 	}
