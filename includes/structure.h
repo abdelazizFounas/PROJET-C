@@ -18,10 +18,7 @@ cree le 28/05 */
 typedef struct dict_elem dict_elem;
 struct dict_elem {
 	unsigned int code;
-	char* prefixe;
-	unsigned int code_pref;
-	char suffixe;
-	unsigned int code_suf;
+	char* mot;
 	struct dict_elem* next;
 };
 
@@ -37,7 +34,7 @@ penser a rajouter un pointeur sur le dernier element de la liste !!!!!!
 /* DECLARATION DES FONCTIONS */
 
 /* fonction de creation d'un element du dictionnaire */
-dict_elem* create_elem(unsigned int code, char* prefixe, char suffixe, unsigned int code_pref, unsigned int code_suf);
+dict_elem* create_elem(unsigned int code, char* mot);
 
 /* fonction d'initialisation de notre chaine avec les 258 premiers elements de base */
 void init();

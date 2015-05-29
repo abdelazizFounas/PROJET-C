@@ -128,6 +128,13 @@ char* nom_fichier_lzw(char* fichier){
 }*/
 
 
+
+
+
+
+
+
+
 // declaration de la fonction main
 int main(int argc, char *argv[])
 {

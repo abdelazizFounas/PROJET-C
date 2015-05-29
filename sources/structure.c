@@ -7,18 +7,14 @@ dict_elem* ptr_chaine_d = NULL;
 dict_elem* ptr_chaine_f = NULL;
 
 /* fonction de creation d'un element du dictionnaire */
-dict_elem* create_elem(unsigned int code, char* prefixe, char suffixe, unsigned int code_pref, unsigned int code_suf){
+dict_elem* create_elem(unsigned int code, char* mot){
 	/* reserve de place en memoire */
 	dict_elem* newElement = (dict_elem*) malloc(sizeof(dict_elem));
 	
 	/* assigner les valeurs passer en parametre */
 	newElement->code = code;
-	newElement->code_pref = code_pref;
-	newElement->code_suf = code_suf;
-	
-	/* trouver le code des prefixes et suffixes --> utiliser find */
-	newElement->prefixe = prefixe;
-	newElement->suffixe = suffixe;
+	newElement->mot = mot;
+	newElement->next = NULL;
 	
 	return newElement;
 }
@@ -27,27 +23,30 @@ dict_elem* create_elem(unsigned int code, char* prefixe, char suffixe, unsigned 
 void init(){
 	dict_elem* ptr_tmp;
 
+	char* mot;
+	mot = (char*) malloc(2*sizeof(char));
+	*mot = 0;
+	*(mot+1) = '\0';
 	/* initialisation du premier element de la chaine */
-	ptr_chaine_d = create_elem(0,"",0,0,0);
+	ptr_chaine_d = create_elem(0,mot);
 	ptr_chaine_f = ptr_chaine_d;
 	
 	/* init de tmp parcourant la chaine et parcours de la chaine en creant un nouvel element pour chaque caractere */
 	ptr_tmp = ptr_chaine_d;
 	for (int i=1; i<256; i++){
 		/* le pointeur sur l'element suivant pointe sur le nouvel element cree grace a create_elem */
-		ptr_tmp->next = create_elem(i,"",i,0,i); // dernier element de la chaine pointe sur Nil
+		mot = (char*) malloc(2*sizeof(char));
+		*mot = i;
+		*(mot+1) = '\0';
+		ptr_tmp->next = create_elem(i,mot); // dernier element de la chaine pointe sur Nil
 		ptr_tmp = ptr_tmp->next;
 	}
-
-	ptr_tmp->next = create_elem(256,"",0,0,256); // dernier element de la chaine pointe sur Nil
+	ptr_tmp->next = create_elem(256,NULL); // dernier element de la chaine pointe sur Nil
 	ptr_tmp = ptr_tmp->next;
-	ptr_tmp->next = create_elem(257,"",0,0,257); // dernier element de la chaine pointe sur Nil
-	ptr_tmp = ptr_tmp->next;
+	ptr_tmp->next = create_elem(257,NULL); // dernier element de la chaine pointe sur Nil
+	ptr_chaine_f = ptr_tmp->next;
 
-	ptr_chaine_f = ptr_tmp;
-	ptr_chaine_f->next = NULL;
-
-	nb_elem = 257;
+	nb_elem = 258;
 }
 
 /* fonction de destruction d'un dictionnaire */
@@ -76,25 +75,24 @@ unsigned int length (dict_elem* ptr_dict_elem){
 /* fonction de recherche d'un code dans la liste */
 dict_elem* search(char* string){
 	dict_elem* ptr_tmp;
-	char* chaine;
 	/* initialisation du ptr de parcours */
 	ptr_tmp = ptr_chaine_d;
 	
 	/* tant qu'on n'est pas en fin de liste et qu'on ne trouve pas le bon prefixe, on avance 
 	 * note : le strcmp renvoie 0 si les chaines sont égales, nb>0 si s1 est superieur a s2 dans ordre lexicographique
 	 * sinon elle renvoie un nb negatif */
-	chaine = cat_str_char(ptr_tmp->prefixe,ptr_tmp->suffixe);
-	while((ptr_tmp != NULL) && (strcmp(string,chaine) != 0)){
-		free(chaine);
-		ptr_tmp = ptr_tmp->next;
-		if(ptr_tmp != NULL){
-			chaine = cat_str_char(ptr_tmp->prefixe,ptr_tmp->suffixe);
+	int res = strcmp(string,ptr_tmp->mot);
+	while((ptr_tmp != NULL) && (res !=0)){
+		if(ptr_tmp->code == 256 || ptr_tmp->code == 257){
+			ptr_tmp = ptr_tmp->next;
+		}
+		else{
+			res = strcmp(string,ptr_tmp->mot);
+			if(res != 0){
+				ptr_tmp = ptr_tmp->next;
+			}
 		}
 	}
-	if(ptr_tmp != NULL){
-		free(chaine);
-	}
-
 	return ptr_tmp;	
 }
 
@@ -115,10 +113,8 @@ unsigned int find_code (char* string){
 /* fonction d'insertion en queue d'un code dans la liste*/
 void insert(char* prefixe, char suffixe){
 	nb_elem++;
-	dict_elem* intermediaire = create_elem(nb_elem, prefixe, suffixe, find_code(prefixe), suffixe);
-	ptr_chaine_f->next = intermediaire;
+	ptr_chaine_f->next = create_elem(nb_elem, cat_str_char(prefixe,suffixe));
 	ptr_chaine_f = ptr_chaine_f->next;
-	intermediaire->next = NULL;
 }
 
 /* fonction de concatenation d'une chaine et d'un caractere */
@@ -142,7 +138,7 @@ void toStr(){
 	ptr_tmp = ptr_chaine_d;
 	
 	while(ptr_tmp != NULL){
-		printf("(-%lu-,-%s-,-%c-,-%d-) ", strlen(ptr_tmp->prefixe), ptr_tmp->prefixe, ptr_tmp->suffixe,ptr_tmp->code);
+		printf("(-%d-%lu-%s-) ", ptr_tmp->code, strlen(ptr_tmp->mot), ptr_tmp->mot);
 		ptr_tmp = ptr_tmp->next;
 	}
 }

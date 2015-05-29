@@ -75,7 +75,6 @@ char compression_fichier(FILE* fichier){
 		chaine_octet* nouveau;
 		
 		init();
-
 		// on affiche le succes de l'ouverture du fichier
 		printf("Ouverture du fichier réussie.\n");
 
@@ -117,7 +116,7 @@ char compression_fichier(FILE* fichier){
     				nb_bits_code++;
     				if(nb_bits_code==16){
 
-    					envoyer_bits(fichier_dest, 256);
+    					envoyer_bits(fichier_dest, 257);
     					printf("EEEEEEEEEEE\n");
     					destruction();
     					init();
@@ -128,10 +127,10 @@ char compression_fichier(FILE* fichier){
     			}
         	}
         	
-        	//free(string);
+        	free(string);
 		}
 
-		envoyer_bits(fichier_dest, 257);
+		envoyer_bits(fichier_dest, 256);
 		envoyer_reste(fichier_dest);
 
 		// fermeture du fichier
