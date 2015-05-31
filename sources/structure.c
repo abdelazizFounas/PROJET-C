@@ -24,29 +24,27 @@ void init(){
 	dict_elem* ptr_tmp;
 
 	char* mot;
-	mot = (char*) malloc(2*sizeof(char));
-	*mot = 0;
-	*(mot+1) = '\0';
+	mot = cat_str_char("", 0);
 	/* initialisation du premier element de la chaine */
 	ptr_chaine_d = create_elem(0,mot);
-	ptr_chaine_f = ptr_chaine_d;
 	
 	/* init de tmp parcourant la chaine et parcours de la chaine en creant un nouvel element pour chaque caractere */
 	ptr_tmp = ptr_chaine_d;
 	for (int i=1; i<256; i++){
 		/* le pointeur sur l'element suivant pointe sur le nouvel element cree grace a create_elem */
-		mot = (char*) malloc(2*sizeof(char));
-		*mot = i;
-		*(mot+1) = '\0';
+		mot = cat_str_char("", i);
 		ptr_tmp->next = create_elem(i,mot); // dernier element de la chaine pointe sur Nil
 		ptr_tmp = ptr_tmp->next;
 	}
 	ptr_tmp->next = create_elem(256,NULL); // dernier element de la chaine pointe sur Nil
 	ptr_tmp = ptr_tmp->next;
 	ptr_tmp->next = create_elem(257,NULL); // dernier element de la chaine pointe sur Nil
+	ptr_tmp = ptr_tmp->next;
+	ptr_tmp->next = create_elem(258,NULL); // dernier element de la chaine pointe sur Nil
 	ptr_chaine_f = ptr_tmp->next;
+	ptr_chaine_f->next = NULL;
 
-	nb_elem = 258;
+	nb_elem = 259;
 }
 
 /* fonction de destruction d'un dictionnaire */
@@ -83,7 +81,7 @@ dict_elem* search(char* string){
 	 * sinon elle renvoie un nb negatif */
 	int res = strcmp(string,ptr_tmp->mot);
 	while((ptr_tmp != NULL) && (res !=0)){
-		if(ptr_tmp->code == 256 || ptr_tmp->code == 257){
+		if(ptr_tmp->code == 256 || ptr_tmp->code == 257 || ptr_tmp->code == 258){
 			ptr_tmp = ptr_tmp->next;
 		}
 		else{
@@ -104,7 +102,6 @@ int exist (char* prefixe, char suffixe){
 	return (res!= NULL);
 }
 
-
 /* fonction find_code renvoyant le code du mot lu passe par la chaine de caractere en parametre */
 unsigned int find_code (char* string){
 	return (search(string))->code;
@@ -114,6 +111,7 @@ unsigned int find_code (char* string){
 void insert(char* prefixe, char suffixe){
 	ptr_chaine_f->next = create_elem(nb_elem, cat_str_char(prefixe,suffixe));
 	ptr_chaine_f = ptr_chaine_f->next;
+	ptr_chaine_f->next = NULL;
 	nb_elem++;
 }
 
@@ -133,12 +131,12 @@ char* cat_str_char (char* str, char car){
 }
 
 void toStr(){
-	dict_elem* ptr_tmp;
-	/* initialisation du ptr de parcours */
-	ptr_tmp = ptr_chaine_d;
+	dict_elem* ptr_tmp = ptr_chaine_d;
 	
 	while(ptr_tmp != NULL){
-		printf("(-%d-%s-) ", ptr_tmp->code, ptr_tmp->mot);
+		if(ptr_tmp->code != 256 && ptr_tmp->code != 257 && ptr_tmp->code != 258){
+			printf("(-%d-%lu-%s-)\n", ptr_tmp->code, strlen(ptr_tmp->mot), ptr_tmp->mot);
+		}
 		ptr_tmp = ptr_tmp->next;
 	}
 }

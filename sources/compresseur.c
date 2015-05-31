@@ -6,7 +6,7 @@
 #include "compresseur.h"
 
 int nb_elem_max = 512;
-int nb_elem_courant = 258;
+int nb_elem_courant = 259;
 
 int nb_bits_code = 9;
 
@@ -72,7 +72,6 @@ char compression_fichier(FILE* fichier){
 
 		chaine_octet* tete_liste;
 		chaine_octet* queue_liste;
-		chaine_octet* nouveau;
 		
 		init();
 		// on affiche le succes de l'ouverture du fichier
@@ -85,64 +84,91 @@ char compression_fichier(FILE* fichier){
     	tete_liste->next = NULL;
     	queue_liste = tete_liste;
     	fscanf(fichier, "%c", &(queue_liste->octet));
+    	//printf("1\n");
 
         while (!feof(fichier)) {
+        	if(nb_elem_courant == nb_elem_max){
+				if(nb_bits_code==11){
+					envoyer_bits(fichier_dest, a);
+					printf("--------%d-%d---\n", a, nb_elem_courant);
+					envoyer_bits(fichier_dest, 257);
+					printf("--------%d-%d---\n", 257, nb_elem_courant);
+					//printf("EEEEEEEEEEE\n");
+					destruction();
+					init();
+					fscanf(fichier, "%c", &(queue_liste->octet));
+					nb_elem_max = 512;
+					nb_elem_courant = 259;
+					nb_bits_code = 9;			
+				}
+				else{
+					//printf("11\n");
+					envoyer_bits(fichier_dest, 258);
+					printf("--------%d-%d---\n", 258, nb_elem_courant);
+					nb_elem_max *= 2;
+					nb_bits_code++;
+				}
+			}
+        	//printf("2\n");
         	fscanf(fichier, "%c", &a);
+        	//printf("3\n");
         	char* string = creer_chaine(tete_liste, taille_chaine);
+        	//printf("4 \n");
         	if(exist(string, a) != 0){
+        		//printf("5\n");
         		taille_chaine++;
-        		nouveau = (chaine_octet*) malloc(sizeof(chaine_octet));
-        		nouveau->next = NULL;
-        		nouveau->octet = a;
-
-        		queue_liste->next = nouveau;
-        		queue_liste = nouveau;        		
+        		queue_liste->next = (chaine_octet*) malloc(sizeof(chaine_octet));
+        		queue_liste = queue_liste->next;
+        		queue_liste->next = NULL;
+        		queue_liste->octet = a;     		
         	}
         	else{
+        		//printf("6\n");
         		nb_elem_courant++;
     			
 				envoyer_bits(fichier_dest, find_code(string));
 
+				printf("--------%d-%d-%s-\n", find_code(string), nb_elem_courant, string);
+
+				//printf("7\n");
+
 				insert(string, a);
+				//printf("8\n");
 				effacer_octet(tete_liste);
+				//printf("9\n");
 				tete_liste = (chaine_octet*) malloc(sizeof(chaine_octet));
+				//printf("10\n");
 				tete_liste->next = NULL;
     			queue_liste = tete_liste;
     			queue_liste->octet = a;
     			taille_chaine = 1;
 
-    			if(nb_elem_courant == nb_elem_max){
-    				nb_elem_max *= 2;
-    				nb_bits_code++;
-    				if(nb_bits_code==16){
 
-    					envoyer_bits(fichier_dest, 257);
-    					printf("EEEEEEEEEEE\n");
-    					destruction();
-    					init();
-    					nb_elem_max = 512;
-    					nb_elem_courant = 258;
-    					nb_bits_code = 9; 					
-    				}
-    			}
         	}
         	
+        	//printf("12\n");
         	free(string);
 		}
-
+		//printf("13\n");
 		envoyer_bits(fichier_dest, 256);
+		printf("--------%d-%d---\n", 256, nb_elem_courant);
+		//printf("14\n");
 		envoyer_reste(fichier_dest);
+		//printf("15\n");
 
 		// fermeture du fichier
 		fclose(fichier);
 		fclose(fichier_dest);
-
+		
+		toStr();
 		destruction();
+		//printf("16\n");
     	nb_elem_max = 512;
-    	nb_elem_courant = 258;
+    	nb_elem_courant = 259;
     	nb_bits_code = 9; 
 
-		toStr();
+		
+		//printf("17\n");
 		// on retourne 1 pour signifier la reussite de l operation
 		return 1;
 	}

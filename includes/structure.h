@@ -19,7 +19,7 @@ typedef struct dict_elem dict_elem;
 struct dict_elem {
 	unsigned int code;
 	char* mot;
-	struct dict_elem* next;
+	dict_elem* next;
 };
 
 /* STRUCTURE ... */
@@ -59,3 +59,5 @@ void insert (char* prefixe, char suffixe);
 char* cat_str_char (char* str, char car);
 
 void toStr();
+
+char* search_by_code(int code);
