@@ -2,19 +2,12 @@
 et les en-tete de fonction les manipulant 
 cree le 28/05 */
 
-
 #include <stdlib.h>
 #include <stdio.h>
 
-
-/* Variables globales */
-
-
-
-
 /* DECLARATION DES STRUCTURES */
 
-/* STRUCTURE dict_elem : liste des codes */
+/* STRUCTURE dict_elem : liste des codes et des mots */
 typedef struct dict_elem dict_elem;
 struct dict_elem {
 	unsigned int code;
@@ -22,42 +15,34 @@ struct dict_elem {
 	dict_elem* next;
 };
 
-/* STRUCTURE ... */
-
-/*
-création d'un tableau de code pour aller plus vite ?
---> chaine inutile apres, ou uniquement pour codes suivants les 256 premiers basiques
-
-penser a rajouter un pointeur sur le dernier element de la liste !!!!!!
-*/
-
-/* DECLARATION DES FONCTIONS */
+/* DECLARATION DES PROTOTYPES */
 
 /* fonction de creation d'un element du dictionnaire */
 dict_elem* create_elem(unsigned int code, char* mot);
 
-/* fonction d'initialisation de notre chaine avec les 258 premiers elements de base */
+/* fonction d'initialisation de notre chaine avec les 259 premiers elements de base */
 void init();
 
+/* fonction de destruction d'un dictionnaire */
 void destruction();
 
-
-
-/* fonction longueur de chaine */
-unsigned int length (dict_elem* ptr_dict_elem);
-
-/* fonction de recherche d'un code dans la liste */
+/* fonction de recherche d'un element grace a un mot dans le dictionnaire */
 dict_elem* search (char* string);
 
-int exist (char* prefixe, char suffixe);
+/* fonction de recherche d'un mot grace a un code dans le dictionnaire */
+char* search_by_code(int code);
 
+/* fonction de recherche d'un code grace a un mot dans le dictionnaire */
 unsigned int find_code (char* string);
 
-/* fonction d'insertion d'un code dans la liste*/
+/* fonction d'existence d'un mot dans le dictionnaire */
+int exist (char* prefixe, char suffixe);
+
+/* fonction d'insertion d'un mot dans le dictionnaire */
 void insert (char* prefixe, char suffixe);
 
+/* fonction de concatenation d'une chaine et d'un caractere */
 char* cat_str_char (char* str, char car);
 
+/* fonction affichant le dictionnaire */
 void toStr();
-
-char* search_by_code(int code);
