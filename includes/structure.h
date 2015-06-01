@@ -15,6 +15,12 @@ struct dict_elem {
 	dict_elem* next;
 };
 
+typedef struct chaine_octet chaine_octet;
+struct chaine_octet{
+	char octet;
+	chaine_octet* next;
+};
+
 /* DECLARATION DES PROTOTYPES */
 
 /* fonction de creation d'un element du dictionnaire */
@@ -46,3 +52,5 @@ char* cat_str_char (char* str, char car);
 
 /* fonction affichant le dictionnaire */
 void toStr();
+
+int cmp_chaine_octet(chaine_octet* chaine1, chaine_octet* chaine2);
