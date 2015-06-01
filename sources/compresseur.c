@@ -86,18 +86,18 @@ char compression_fichier(FILE* fichier){
     	queue_liste = tete_liste;
     	b = fgetc(fichier);
     	queue_liste->octet = b;
-    	printf("1\n");
+    	//printf("1\n");
 
         while (!feof(fichier)) {
         	//toStr();
         	if(nb_elem_courant == nb_elem_max){
 				if(nb_bits_code==11){
 					envoyer_bits(fichier_dest, a);
-					printf("-%d-%d-%c-\n", a, nb_elem_courant,a);
-					printf("--------%d-%d---\n", a, nb_elem_courant);
+					//printf("-%d-%d-%c-\n", a, nb_elem_courant,a);
+					//printf("--------%d-%d---\n", a, nb_elem_courant);
 					envoyer_bits(fichier_dest, 257);
-					printf("-%d-%d-\n", 257, nb_elem_courant);
-					printf("--------%d-%d---\n", 257, nb_elem_courant);
+					//printf("-%d-%d-\n", 257, nb_elem_courant);
+					//printf("--------%d-%d---\n", 257, nb_elem_courant);
 					//printf("EEEEEEEEEEE\n");
 					//toStr();
 					destruction();
@@ -110,21 +110,21 @@ char compression_fichier(FILE* fichier){
 					taille_chaine = 1;			
 				}
 				else{
-					printf("11\n");
+					//printf("11\n");
 					envoyer_bits(fichier_dest, 258);
-					printf("-%d-%d-\n", 258, nb_elem_courant);
-					printf("--------%d-%d---\n", 258, nb_elem_courant);
+					//printf("-%d-%d-\n", 258, nb_elem_courant);
+					//printf("--------%d-%d---\n", 258, nb_elem_courant);
 					nb_elem_max *= 2;
 					nb_bits_code++;
 				}
 			}
-        	printf("2\n");
+        	//printf("2\n");
         	a = fgetc(fichier);
-        	printf("3\n");
-        	printf("4 \n");
+        	//printf("3\n");
+        	//printf("4 \n");
         	if(exist(tete_liste, a) != 0){
-        		printf("5\n");
-        		printf("-%c-\n", a);
+        		//printf("5\n");
+        		//printf("-%c-\n", a);
         		taille_chaine++;
         		queue_liste->next = (chaine_octet*) malloc(sizeof(chaine_octet));
         		queue_liste = queue_liste->next;
@@ -133,23 +133,24 @@ char compression_fichier(FILE* fichier){
         	}
         	else{
         		
-        		printf("6-\n");
-    			afficher_octet(tete_liste);printf("-%d-\n", a);
+        		//printf("6-\n");
+    			//afficher_octet(tete_liste);
+    			//printf("-%d-\n", a);
     			insert(tete_liste, a);
     			//toStr();
     			//toStrP(arbre, 0);
 				envoyer_bits(fichier_dest, find_code(tete_liste));
-				printf("-%d-%d-\n", find_code(tete_liste), nb_elem_courant);
+				//printf("-%d-%d-\n", find_code(tete_liste), nb_elem_courant);
 
-				printf("7\n");
+				//printf("7\n");
 
 				
 				nb_elem_courant++;
-				printf("8\n");
+				//printf("8\n");
 				effacer_octet(tete_liste);
-				printf("9\n");
+				//printf("9\n");
 				tete_liste = (chaine_octet*) malloc(sizeof(chaine_octet));
-				printf("10\n");
+				//printf("10\n");
 				tete_liste->next = NULL;
     			queue_liste = tete_liste;
     			queue_liste->octet = a;
@@ -157,22 +158,22 @@ char compression_fichier(FILE* fichier){
 
 
         	}
-        	printf("taille_chaine : %d.\n", taille_chaine);
-        	printf("12\n");
+        	//printf("taille_chaine : %d.\n", taille_chaine);
+        	//printf("12\n");
 		}
-		printf("taille_chaine : %d.\n", taille_chaine);
+		//printf("taille_chaine : %d.\n", taille_chaine);
 
-		supp_dern_elem(tete_liste);
+		//supp_dern_elem(tete_liste);
 
-		envoyer_bits(fichier_dest, find_code(tete_liste));
+		//envoyer_bits(fichier_dest, find_code(tete_liste));
 		effacer_octet(tete_liste);
-		printf("13\n");
+		//printf("13\n");
 		envoyer_bits(fichier_dest, 256);
-		printf("-%d-%d-\n", 256, nb_elem_courant);
-		printf("--------%d-%d---\n", 256, nb_elem_courant);
-		printf("14\n");
+		//printf("-%d-%d-\n", 256, nb_elem_courant);
+		//printf("--------%d-%d---\n", 256, nb_elem_courant);
+		//printf("14\n");
 		envoyer_reste(fichier_dest);
-		printf("15\n");
+		//printf("15\n");
 
 		// fermeture du fichier
 		fclose(fichier);
@@ -180,13 +181,13 @@ char compression_fichier(FILE* fichier){
 		
 		//toStr();
 		destruction();
-		printf("16\n");
+		//printf("16\n");
     	nb_elem_max = 512;
     	nb_elem_courant = 259;
     	nb_bits_code = 9; 
 
 		
-		printf("17\n");
+		//printf("17\n");
 		// on retourne 1 pour signifier la reussite de l operation
 		return 1;
 	}
@@ -197,7 +198,7 @@ char compression_fichier(FILE* fichier){
 		return -1;
 	}
 
-	printf("%u\n", char_to_int('a'));
+	//printf("%u\n", char_to_int('a'));
 	
 	/*chaine_octet* tete_liste;
 	chaine_octet* queue_liste;

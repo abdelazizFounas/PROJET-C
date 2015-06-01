@@ -24,17 +24,28 @@ arbre_n* create_elem(unsigned int code, chaine_octet* chaine, unsigned int code_
 	return newElement;
 }
 
-void supp_dern_elem(chaine_octet* chaine){
+chaine_octet* supp_dern_elem(chaine_octet* chaine){
+	chaine_octet* chaine_tete = (chaine_octet*) malloc(sizeof(chaine_octet));
+	chaine_tete->octet = chaine->octet;
+	chaine_octet* chaine_tete_cour = chaine_tete;
 	chaine_octet* chaine_tmp = chaine;
-	chaine_octet* chaine_prec = chaine;
-
-	while(chaine_tmp->next != NULL){
-		chaine_prec = chaine_tmp;
+	
+	while((chaine_tmp->next !=NULL) && ((chaine_tmp->next)->next !=NULL)){
+		chaine_tete_cour->next = (chaine_octet*) malloc(sizeof(chaine_octet));
 		chaine_tmp = chaine_tmp->next;
+		chaine_tete_cour = chaine_tete_cour->next;
+		chaine_tete_cour->octet = chaine_tmp->octet;
 	}
+	
 
-	//free(chaine_tmp);
-	chaine_prec->next = NULL;
+	if(chaine_tmp->next == NULL){
+		free(chaine_tete);
+		return NULL;
+	}
+	else{
+		chaine_tete_cour->next = NULL;
+		return chaine_tete;
+	}
 }
 
 /* fonction d'initialisation de notre chaine avec les 258 premiers elements de base

@@ -40,7 +40,7 @@ unsigned int lire_code(FILE* fichier){
 		//printf("----%d-%d-%d-%d-%d-%d-XXXXX\n", res, nb_bits_d, nb_bits_d_code, nb_elem_courant_d, k, taille_ficher);
 	}*/
 
-	printf("-%d-%d-\n", res, nb_elem_courant_d);
+	//printf("-%d-%d-\n", res, nb_elem_courant_d);
 
 	nb_bits_d -= nb_bits_d_code;
 	return res;
@@ -86,9 +86,9 @@ char decompression_fichier (FILE* fichier){
 			//printf("1-%d-\n", i_prime);
 
 			i_prime = lire_code(fichier);
-			printf("14\n");
+			//printf("14\n");
 			if(i_prime==258){
-				printf("2\n");
+				//printf("2\n");
 				//printf("ZZZZZZZZZZZZ\n");
 				nb_elem_max_d *= 2;
 				nb_bits_d_code++;
@@ -96,20 +96,20 @@ char decompression_fichier (FILE* fichier){
 			}
 
 			if(i_prime==257){
-				printf("3\n");
+				//printf("3\n");
 				//printf("EEEEEEEEEEE\n");
-				supp_dern_elem(w);
+				w = supp_dern_elem(w);
 				envoyer_chaine(fichier_dest,w);
 				//toStr();
 				destruction();
 				init();
-				printf("4\n");
+				//printf("4\n");
 				nb_elem_max_d = 512;
 				nb_elem_courant_d = 259;
 				nb_bits_d_code = 9;
 				i = lire_code(fichier);
 				a->octet = i;
-				//effacer_octet(w);
+				effacer_octet(w);
 				w = (chaine_octet*) malloc(sizeof(chaine_octet));
 				w->next = NULL;
 				w->octet = i;
@@ -118,13 +118,13 @@ char decompression_fichier (FILE* fichier){
 			}
 			else{
 				if(i_prime != 256){
-					printf("5\n");
+					//printf("5\n");
 					res = search_by_code(i_prime);
 				}
 				else{
 					res=NULL;
 				}
-				printf("6\n");
+				//printf("6\n");
 				if (res==NULL){
 					//printf("7\n");
 					effacer_octet(w_prime);
@@ -135,22 +135,22 @@ char decompression_fichier (FILE* fichier){
 					effacer_octet(w_prime);
 					w_prime = chaine_cpy(res);
 				}
-				printf("8\n");
+				//printf("8\n");
 				if(i_prime != 256){
 					envoyer_chaine(fichier_dest,w_prime);
 				}
 				
-				printf("9\n");
+				//printf("9\n");
 				a->octet = w_prime->octet;
 				//printf("ZZZZZEERRRRR\n");
 				insert(w,a->octet);
-				printf("10\n");
+				//printf("10\n");
 
 				i = i_prime;
 				if(i!=256){
 					
 					if(i!=256){
-						printf("12\n");
+						//printf("12\n");
 						//effacer_octet(w);
 						w = search_by_code(i);
 					}
@@ -158,7 +158,7 @@ char decompression_fichier (FILE* fichier){
 			}
 			nb_elem_courant_d++;
 		}
-		printf("13\n");
+		//printf("13\n");
 		//envoyer_chaine(fichier_dest,fin);
 
 		//printf("DDDDDDDDDD %d\n",nb_bits_d);
